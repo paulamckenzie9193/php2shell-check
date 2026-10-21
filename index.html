@@ -41,7 +41,7 @@
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,207,115,.55)}70%{box-shadow:0 0 0 10px rgba(255,207,115,0)}100%{box-shadow:0 0 0 0 rgba(255,207,115,0)}}
 
   h1{font-size:clamp(32px,6.4vw,52px);line-height:1.04;letter-spacing:-.03em;font-weight:800;margin:20px 0 14px}
-  h1 .hl{background:linear-gradient(100deg,#8fb0ff,#5b8cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1 .hl{color:#8fb0ff}
   .lede{color:var(--mut);font-size:clamp(17px,2.4vw,19px);margin:0 0 34px;max-width:54ch}
 
   .tool{position:relative;background:linear-gradient(180deg,var(--panel-top),var(--panel));
@@ -52,7 +52,7 @@
   .ifield{position:relative;flex:1;min-width:230px}
   .ifield .pfx{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--faint);font-family:var(--mono);font-size:14px;pointer-events:none}
   input{width:100%;background:#070d1d;border:1px solid var(--line);color:var(--fg);
-    padding:15px 15px 15px 50px;border-radius:13px;font-size:16px;font-family:var(--mono);outline:none;transition:border-color .15s,box-shadow .15s}
+    padding:15px 15px 15px 88px;border-radius:13px;font-size:16px;font-family:var(--mono);outline:none;transition:border-color .15s,box-shadow .15s}
   input::placeholder{color:#415072;font-family:var(--mono)}
   input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(91,140,255,.18)}
   button{background:linear-gradient(180deg,var(--acc2),var(--acc));color:#06102b;border:0;
@@ -72,11 +72,12 @@
   .result.ok{background:var(--ok-bg);border-color:var(--ok-line)} .result.ok h3{color:var(--ok)}
   .result.bad{background:var(--bad-bg);border-color:var(--bad-line)} .result.bad h3{color:var(--bad)}
   .result.warn{background:var(--warn-bg);border-color:var(--warn-line)} .result.warn h3{color:var(--warn)}
-  code{font-family:var(--mono);background:#070d1d;border:1px solid var(--line);padding:2px 7px;border-radius:7px;font-size:12.5px;word-break:break-all}
+  code{font-family:var(--mono);background:#070d1d;border:1px solid var(--line);padding:2px 7px;border-radius:7px;font-size:12.5px;display:inline-block;max-width:100%;overflow-wrap:anywhere;vertical-align:bottom}
   .cta{display:flex;gap:11px;flex-wrap:wrap;margin-top:16px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15px;
+  .btn{flex:1 1 220px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15px;
     padding:14px 20px;border-radius:13px;border:1px solid var(--line);color:var(--fg);background:#0c1630;transition:filter .15s,border-color .15s}
   .btn:hover{border-color:var(--acc)}
+  .result .btn:not(.primary){background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
   .btn.primary{background:linear-gradient(180deg,var(--acc2),var(--acc));color:#06102b;border-color:transparent}
   .btn.primary:hover{filter:brightness(1.07)}
   .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(6,16,43,.35);border-top-color:#06102b;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-3px;margin-right:8px}
@@ -94,16 +95,18 @@
   .note{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;color:var(--mut);font-size:14.5px}
   .foot{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--faint);font-size:13.5px}
   a{color:var(--acc2);text-decoration:none}a:hover{text-decoration:underline}
+  @media (max-width:600px){.row>button{width:100%}}
+  @media (max-width:479px){h1 br{display:none}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.result{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <span class="tag"><span class="dot"></span>Critical · disclosed 21 Oct 2026</span>
+  <span class="tag"><span class="dot"></span>Critical · CVE-2026-109618 · 21 Oct 2026</span>
 
   <h1>Is your website<br>exposed to <span class="hl">PHP2Shell</span>?</h1>
-  <p class="lede">A critical, unauthenticated flaw in PHP (CVE-2026-109618 / CVE-2026-109619) lets an attacker run code on your server with a normal-looking file upload. Type your site — the check takes seconds.</p>
+  <p class="lede">A critical, unauthenticated flaw in PHP lets an attacker run code on your server with a normal-looking file upload. Type your site — the check takes seconds.</p>
 
   <div class="tool">
     <form id="form" autocomplete="off">
@@ -122,10 +125,10 @@
   <div class="section">
     <h2>Which versions are safe</h2>
     <div class="grid">
-      <div class="vt"><span class="b">PHP 8.5.x</span><span class="f">8.5.12 +</span></div>
-      <div class="vt"><span class="b">PHP 8.4.x</span><span class="f">8.4.27 +</span></div>
-      <div class="vt"><span class="b">PHP 8.3.x</span><span class="f">8.3.36 +</span></div>
-      <div class="vt"><span class="b">PHP 8.2.x</span><span class="f">8.2.35 +</span></div>
+      <div class="vt"><span class="b">PHP 8.5.x</span><span class="f">8.5.12 or newer</span></div>
+      <div class="vt"><span class="b">PHP 8.4.x</span><span class="f">8.4.27 or newer</span></div>
+      <div class="vt"><span class="b">PHP 8.3.x</span><span class="f">8.3.36 or newer</span></div>
+      <div class="vt"><span class="b">PHP 8.2.x</span><span class="f">8.2.35 or newer</span></div>
       <div class="vt"><span class="b">PHP 8.1.x &amp; older</span><span class="f eol">end of life → 8.2+</span></div>
     </div>
     <p class="fine">Affected: every PHP from 5.4 through 8.5.11 in the default configuration.</p>
@@ -137,7 +140,8 @@
   </div>
 
   <div class="foot">
-    Fixed releases: 8.5.12 · 8.4.27 · 8.3.36 · 8.2.35. &nbsp; Want it patched and verified for you? <a href="mailto:alice3861wil@gmail.com">alice3861wil@gmail.com</a>
+    <div>Fixed releases: 8.5.12 · 8.4.27 · 8.3.36 · 8.2.35.</div>
+    <div style="margin-top:7px">Want it patched and verified for you? Email <a href="mailto:alice3861wil@gmail.com">alice3861wil@gmail.com</a> — replies usually within a few hours.</div>
   </div>
 </div>
 
@@ -178,7 +182,10 @@
     if(r.error){ show('<div class="head">'+ICON.warn+'<h3>Hmm</h3></div><p>'+esc(r.error)+'</p>', "warn"); return; }
     var cls = CLS[r.status] || "warn";
     var icon = cls==="ok"?ICON.ok:cls==="bad"?ICON.bad:ICON.warn;
-    var cta = r.status!=="ok" ? ctaBlock() : '<p class="seen">Nothing to buy — you\'re set. Re-check after any server or host change.</p>';
+    var cta;
+    if(r.status==="ok") cta = '<p class="seen">Nothing to buy — you\'re set. Re-check after any server or host change.</p>';
+    else if(r.status==="unknown") cta = '<div class="cta"><a class="btn primary" href="'+MANUAL_URL+'">Get the $19 guide</a><a class="btn" href="'+FIX_SERVICE_URL+'">Have it checked properly — $100</a></div>';
+    else cta = ctaBlock();
     var seen = r.seen ? esc(r.seen) : "nothing (version hidden)";
     show('<div class="head">'+icon+'<h3>'+HEAD[r.status]+'</h3></div>'+
          '<p>'+esc(r.detail)+'</p>'+
