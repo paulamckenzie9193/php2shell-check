@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Am I exposed to PHP2Shell? — Free check (CVE-2026-109618)</title>
+<meta name="description" content="Critical PHP flaw disclosed 21 Oct 2026 (PHP2Shell, CVE-2026-109618 / CVE-2026-109619). Paste your PHP version and find out in 10 seconds whether you're patched.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Am I exposed to PHP2Shell?">
+<meta property="og:description" content="Critical unauthenticated PHP RCE out this week. Check your version in 10 seconds — free, no signup.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#0b1020;--panel:#121a33;--panel2:#0f1730;--line:#243154;
+    --fg:#eef2ff;--mut:#9aa7c7;--acc:#5b8cff;--acc2:#7aa2ff;
+    --ok-bg:#0f2e1c;--ok-fg:#5ef2a4;--bad-bg:#3a1320;--bad-fg:#ff8095;--warn-bg:#352607;--warn-fg:#ffcf6b;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:radial-gradient(1200px 600px at 70% -10%,#1b2a55 0%,transparent 55%),var(--bg);
+    color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:56px 18px 80px}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--warn-fg);
+    background:var(--warn-bg);border:1px solid #5a4410;padding:6px 12px;border-radius:999px;letter-spacing:.2px}
+  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--warn-fg);box-shadow:0 0 0 0 rgba(255,207,107,.7);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,207,107,.6)}70%{box-shadow:0 0 0 9px rgba(255,207,107,0)}100%{box-shadow:0 0 0 0 rgba(255,207,107,0)}}
+  @media (prefers-reduced-motion: reduce){.tag .dot{animation:none}}
+  h1{font-size:clamp(30px,6vw,46px);line-height:1.08;letter-spacing:-.02em;margin:18px 0 10px}
+  .lede{color:var(--mut);font-size:18px;margin:0 0 30px;max-width:56ch}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px}
+  label{display:block;font-weight:600;margin:0 0 10px}
+  .hint{color:var(--mut);font-size:14px;font-weight:400}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  input[type=text]{flex:1;min-width:220px;background:#0a1124;border:1px solid var(--line);color:var(--fg);
+    padding:14px 15px;border-radius:12px;font-size:16px;outline:none}
+  input[type=text]:focus{border-color:var(--acc)}
+  button{background:var(--acc);color:#07122e;border:0;font-weight:700;font-size:16px;padding:14px 22px;border-radius:12px;cursor:pointer}
+  button:hover{background:var(--acc2)}
+  .result{margin-top:18px;border-radius:12px;padding:18px;display:none;border:1px solid transparent}
+  .result.show{display:block}
+  .result h3{margin:0 0 6px;font-size:18px}
+  .result p{margin:6px 0;font-size:15px}
+  .result.ok{background:var(--ok-bg);border-color:#15492e;color:var(--ok-fg)}
+  .result.bad{background:var(--bad-bg);border-color:#5a1f30;color:var(--bad-fg)}
+  .result.warn{background:var(--warn-bg);border-color:#5a4410;color:var(--warn-fg)}
+  .result .body{color:var(--fg);margin-top:8px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;
+    padding:14px 20px;border-radius:12px;border:1px solid var(--line);color:var(--fg);background:#0c1630}
+  .btn.primary{background:var(--acc);color:#07122e;border-color:var(--acc)}
+  .btn.primary:hover{background:var(--acc2)}
+  code{background:#0a1124;border:1px solid var(--line);padding:2px 7px;border-radius:7px;font-size:13px}
+  pre{background:#0a1124;border:1px solid var(--line);border-radius:12px;padding:14px 16px;overflow:auto;font-size:13.5px}
+  .section{margin-top:40px}
+  .section h2{font-size:20px;margin:0 0 12px}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600}
+  .fine{color:var(--mut);font-size:13.5px;margin-top:10px}
+  .foot{margin-top:46px;padding-top:22px;border-top:1px solid var(--line);color:var(--mut);font-size:13.5px}
+  a{color:var(--acc2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag"><span class="dot"></span>New · disclosed 21 Oct 2026</span>
+  <h1>Is your website exposed to PHP2Shell?</h1>
+  <p class="lede">A critical, unauthenticated PHP flaw (CVE-2026-109618 / CVE-2026-109619) lets an attacker run code on your server with a normal-looking file upload. Check your version in ten seconds.</p>
+
+  <div class="panel">
+    <label for="v">Paste your PHP version
+      <span class="hint">— run <code>php -v</code> on your server, or check <em>MultiPHP Manager</em> in cPanel. Then type the number, e.g. <code>8.2.18</code>.</span>
+    </label>
+    <div class="row">
+      <input id="v" type="text" inputmode="decimal" placeholder="8.2.18" autocomplete="off" spellcheck="false">
+      <button id="go">Check</button>
+    </div>
+    <div id="out" class="result" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="section">
+    <h2>Which versions are safe</h2>
+    <table>
+      <tr><th>Your branch</th><th>Patched release</th><th>If you're below it</th></tr>
+      <tr><td>8.5.x</td><td><strong>8.5.12</strong></td><td>Update</td></tr>
+      <tr><td>8.4.x</td><td><strong>8.4.27</strong></td><td>Update</td></tr>
+      <tr><td>8.3.x</td><td><strong>8.3.36</strong></td><td>Update</td></tr>
+      <tr><td>8.2.x</td><td><strong>8.2.35</strong></td><td>Update</td></tr>
+      <tr><td>8.1.x &amp; older</td><td>— end of life —</td><td>Move to 8.2+ / distro backport</td></tr>
+    </table>
+    <p class="fine">Affected: every PHP from 5.4 through 8.5.11 in the default configuration.</p>
+  </div>
+
+  <div class="section">
+    <h2>How to check, if you're not sure</h2>
+    <pre>ssh you@yourserver
+php -v
+# or, no shell? drop this in your web root, open it, then delete it:
+#   &lt;?php echo PHP_VERSION;</pre>
+  </div>
+
+  <div class="section">
+    <h2>What this page does — and doesn't</h2>
+    <p class="fine">You run the version check on your own machine and type in the number. This page just tells you whether that version is patched. It never touches your server, never scans anyone, and nothing you type leaves your browser.</p>
+  </div>
+
+  <div class="foot">
+    Fixed releases: 8.5.12 · 8.4.27 · 8.3.36 · 8.2.35. &nbsp;Questions or want it handled for you? <a href="mailto:alice3861wil@gmail.com">alice3861wil@gmail.com</a>
+  </div>
+</div>
+
+<script>
+  // --- EDIT THESE TWO when your payment links are ready ---
+  var FIX_SERVICE_URL = "mailto:alice3861wil@gmail.com?subject=Fix%20my%20PHP2Shell%20exposure";
+  var MANUAL_URL      = "mailto:alice3861wil@gmail.com?subject=PHP2Shell%20DIY%20guide";
+
+  var FIXED = { "8.5":"8.5.12", "8.4":"8.4.27", "8.3":"8.3.36", "8.2":"8.2.35" };
+
+  function cmp(a,b){var x=a.split(".").map(Number),y=b.split(".").map(Number);
+    for(var i=0;i<3;i++){var d=(x[i]||0)-(y[i]||0);if(d)return d;}return 0;}
+
+  function ctaBlock(){
+    return '<div class="cta">'+
+      '<a class="btn primary" href="'+FIX_SERVICE_URL+'">Fix it for me — $100</a>'+
+      '<a class="btn" href="'+MANUAL_URL+'">Do it myself — $19 guide</a></div>';
+  }
+
+  function render(ver){
+    var out = document.getElementById("out");
+    var m = (ver||"").match(/(\d+)\.(\d+)(?:\.(\d+))?/);
+    if(!m){
+      out.className="result warn show";
+      out.innerHTML="<h3>That's not a version number</h3><p>Run <code>php -v</code> and paste the number it prints, like <code>8.2.18</code>.</p>";
+      return;
+    }
+    var version = m[1]+"."+m[2]+"."+(m[3]||"0");
+    var branch = m[1]+"."+m[2];
+    var fixed = FIXED[branch];
+    if(!fixed){
+      out.className="result bad show";
+      out.innerHTML="<h3>Exposed — and unsupported</h3>"+
+        "<p>PHP "+version+" is on branch "+branch+", which no longer gets security fixes from php.net, so PHP2Shell is <strong>not patched</strong> here.</p>"+
+        "<div class='body'>Move to 8.2.35 or newer. On managed hosting (Ubuntu/Debian/cPanel) your provider's backported update is the fastest route.</div>"+ctaBlock();
+      return;
+    }
+    if(cmp(version,fixed) >= 0){
+      out.className="result ok show";
+      out.innerHTML="<h3>You look patched ✓</h3>"+
+        "<p>PHP "+version+" is at or above the fixed release ("+fixed+") for its branch. You appear protected against PHP2Shell.</p>"+
+        "<div class='body'>Nothing to buy. Re-check after any server or host change.</div>";
+      return;
+    }
+    out.className="result bad show";
+    out.innerHTML="<h3>Exposed to PHP2Shell</h3>"+
+      "<p>PHP "+version+" is below the fixed release for its branch (<strong>"+fixed+"</strong>). This version is affected by CVE-2026-109618 / CVE-2026-109619.</p>"+
+      "<div class='body'>Update to "+fixed+" or newer and restart PHP-FPM / your web server.</div>"+ctaBlock();
+  }
+
+  document.getElementById("go").addEventListener("click", function(){ render(document.getElementById("v").value); });
+  document.getElementById("v").addEventListener("keydown", function(e){ if(e.key==="Enter") render(this.value); });
+</script>
+</body>
+</html>
